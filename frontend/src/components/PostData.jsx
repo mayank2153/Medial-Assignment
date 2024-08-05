@@ -3,7 +3,7 @@ const PostData = () => {
     const posts = [
       {
         title: "Sample Post Title 1",
-        description: "This is a sample post description 1.",
+        description: "This is a sample post description 1. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean m",
         owner: {
           userName: "John Doe",
           avatar: "https://via.placeholder.com/40",

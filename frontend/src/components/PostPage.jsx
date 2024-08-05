@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PostData from "./PostData";
 import PostCard from "./PostCard";
@@ -9,24 +9,41 @@ const PostPage = () => {
   const posts = PostData();
   const post = posts.find((p) => p._id === postId);
 
+  const [imageUrl, setImageUrl] = useState('');
+
   if (!post) {
     return <h1>Post not found</h1>;
   }
 
+  const generateImageUrl = (post) => {
+    const params = new URLSearchParams({
+      avatar: post.owner.avatar,
+      title: post.title,
+      description: post.description,
+      media: post.media,
+      username: post.owner.userName,
+      category: post.category.name,
+      updatedAt: post.updatedAt
+    });
+
+    return `http://localhost:3000/api/generate-image?${params.toString()}`;
+  };
+
+  const fetchImageUrl = async () => {
+    const url = generateImageUrl(post);
+    const response = await fetch(url);
+    const data = await response.json();
+    setImageUrl(data.imageUrl);
+  };
+
+  useEffect(() => {
+    fetchImageUrl();
+  }, []);
+
   return (
     <div className="post-page">
       <Helmet>
-        <meta property="og:title" content={post?.title} />
-        <meta property="og:description" content={post?.description} />
-        <meta property="og:image" content={post?.media} />
-        <meta property="og:url" content={`http://localhost:5173/post/${postId}`} />
-        <meta property="og:type" content="website" />
-
-        <meta property="twitter:title" content={post?.title} />
-        <meta property="twitter:description" content={post?.description} />
-        <meta property="twitter:image" content={post?.media} />
-        <meta property="twitter:url" content={`http://localhost:5173/post/${postId}`} />
-        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="og:image" content={imageUrl} />
       </Helmet>
       <div>
         <PostCard {...post} />

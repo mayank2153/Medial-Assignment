@@ -2,15 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineLike, AiOutlineDislike } from 'react-icons/ai';
 import { FaRegComment } from 'react-icons/fa';
-import { Helmet } from "react-helmet"
+import { Helmet } from "react-helmet";
 
 const PostCard = ({ title, description, owner, votes, updatedAt, media, comments, category, _id }) => {
   const [userVote, setUserVote] = useState(null);
 
-  // Simulate current user data
   const currentUser = "user1";
-
-  // Find the user's vote type, if available
   const userVoteType = votes.find(vote => vote.voteOwner === currentUser)?.voteType;
 
   const handleVote = (type) => {
@@ -20,6 +17,7 @@ const PostCard = ({ title, description, owner, votes, updatedAt, media, comments
 
   const voteCount = votes.length;
   const commentCount = comments.length;
+
 
   return (
     <div className="post-card bg-[#13181d] shadow-md w-[500px] max-h-[500px] min-w-[600px] rounded-lg py-1">
@@ -38,13 +36,12 @@ const PostCard = ({ title, description, owner, votes, updatedAt, media, comments
               </div>
             </div>
           )}
-            <p className='text-sm text-white'>{category.name}</p>
-          
+          <p className='text-sm text-white'>{category.name}</p>
         </div>
         <div>
           <div>
-              <h2 className="text-xl font-bold text-white">{title}</h2>
-              <p className="text-[#9bb7b8]">{description}</p>
+            <h2 className="text-xl font-bold text-white">{title}</h2>
+            <p className="text-[#9bb7b8]">{description}</p>
 
             {media && (
               <div className="media mt-4 rounded-2xl border border-slate-200 flex justify-center">
@@ -71,7 +68,7 @@ const PostCard = ({ title, description, owner, votes, updatedAt, media, comments
                     `}
                   onClick={() => handleVote("upvote")}
                 />
-                  <p className='text-xl'>{voteCount}</p>
+                <p className='text-xl'>{voteCount}</p>
                 <AiOutlineDislike
                   size={30}
                   className={`p-1 rounded-full
@@ -84,20 +81,20 @@ const PostCard = ({ title, description, owner, votes, updatedAt, media, comments
                 />
               </div>
             </div>
-              <div className='flex bg-[#222020] rounded-full gap-1 cursor-pointer pr-1'>
-                <FaRegComment size={30} className='hover:text-blue-500 p-1 hover:bg-[#1c1a1a] rounded-full' />
-                <p className='text-xl'>{commentCount}</p>
-              </div>
+            <div className='flex bg-[#222020] rounded-full gap-1 cursor-pointer pr-1'>
+              <FaRegComment size={30} className='hover:text-blue-500 p-1 hover:bg-[#1c1a1a] rounded-full' />
+              <p className='text-xl'>{commentCount}</p>
+            </div>
             {
               currentUser === owner.userName &&
-                <div className='flex bg-[#222020] rounded-full gap-1 cursor-pointer pr-1'>
-                  <p className='text-xl'>Edit</p>
-                </div>
+              <div className='flex bg-[#222020] rounded-full gap-1 cursor-pointer pr-1'>
+                <p className='text-xl'>Edit</p>
+              </div>
             }
             <Link to={`post/${_id}`}>
-            <div className='flex bg-[#222020] rounded-full gap-1 cursor-pointer pr-1'>
-                  <p className='text-xl'>Share</p>
-                </div>
+              <div className='flex bg-[#222020] rounded-full gap-1 cursor-pointer pr-1'>
+                <p className='text-xl'>Share</p>
+              </div>
             </Link>
           </div>
         </div>
