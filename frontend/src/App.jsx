@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import HomePage from './components/HomePage';
-
+import PostPage from './components/PostPage';
 
 function Layout() {
   return (
@@ -16,10 +16,18 @@ const appRouting = createBrowserRouter([
     path: "/",
     element: <Layout />,
     children: [
-        {path: "/",
+      {
+        path: "/",
         element: (
             <HomePage />
-        ),}
+        ),
+      },
+      {
+        path: "post/:postId",
+        element:(
+          <PostPage />
+        )
+      }
     ],
   },
 ]);

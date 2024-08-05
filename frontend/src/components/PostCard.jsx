@@ -23,13 +23,6 @@ const PostCard = ({ title, description, owner, votes, updatedAt, media, comments
 
   return (
     <div className="post-card bg-[#13181d] shadow-md w-[500px] max-h-[500px] min-w-[600px] rounded-lg py-1">
-        <Helmet>
-            <meta property="og:title" content={title} />
-            <meta property="og:description" content={description} />
-            <meta property="og:image" content={media} />
-            <meta property="og:url" content="http://localhost:5173/" />
-            <meta property="og:type" content="website" />
-        </Helmet>
       <div className='hover:bg-[#2e2b2b] rounded-2xl py-4 px-8'>
         <div className='flex gap-10 justify-between'>
           {owner && (
@@ -101,6 +94,11 @@ const PostCard = ({ title, description, owner, votes, updatedAt, media, comments
                   <p className='text-xl'>Edit</p>
                 </div>
             }
+            <Link to={`post/${_id}`}>
+            <div className='flex bg-[#222020] rounded-full gap-1 cursor-pointer pr-1'>
+                  <p className='text-xl'>Share</p>
+                </div>
+            </Link>
           </div>
         </div>
       </div>
