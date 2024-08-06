@@ -43,7 +43,7 @@ const PostPage = () => {
   }, []);
 
   return (
-    <div className="post-page">
+    <div className="post-page flex flex-col bg-[#0d1114] w-full min-h-screen overflow-y-auto items-center no-scrollbar py-8">
       <Helmet>
         <meta property="og:image" content={imageUrl} />
       </Helmet>
