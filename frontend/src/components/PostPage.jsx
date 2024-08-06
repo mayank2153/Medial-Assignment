@@ -26,7 +26,7 @@ const PostPage = () => {
       updatedAt: post.updatedAt
     });
 
-    return `http://localhost:3000/api/generate-image?${params.toString()}`;
+    return `https://medial-assignment.onrender.com/api/generate-image?${params.toString()}`;
   };
 
   const fetchImageUrl = async () => {

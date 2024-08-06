@@ -1,14 +1,15 @@
 import express from 'express';
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 import { app } from './app.js';
-dotenv.config(
-  {
-      path: '.env'
-  }
-)
 
+// Load environment variables from .env file
+dotenv.config({
+  path: '.env'
+});
 
+// Ensure PORT is loaded from environment variables
+const PORT = process.env.PORT || 3000;
 
-app.listen(process.env.PORT,()=>{
-    console.log('listening on port '+process.env.PORT)
-})
+app.listen(PORT, () => {
+  console.log('listening on port ' + PORT);
+});
