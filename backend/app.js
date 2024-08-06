@@ -10,6 +10,15 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Function to encode SVG file to base64
+const encodeToBase64 = (filePath) => {
+  const file = fs.readFileSync(filePath);
+  return `data:image/svg+xml;base64,${file.toString('base64')}`;
+};
+
+const voteIconBase64 = encodeToBase64(path.join(__dirname, 'public', 'voteIcon.svg'));
+const commentIconBase64 = encodeToBase64(path.join(__dirname, 'public', 'commentIcon.svg'));
+
 const app = express();
 
 app.use(cookieParser());
@@ -23,45 +32,8 @@ app.get("/", (req, res) => {
   res.send("Media Assignment");
 });
 
-app.get('/api/generate-html', async (req, res) => {
-  const { avatar, title, description, media, username, category, updatedAt } = req.query;
-  const truncateDescription = (description, maxLength = 50) => {
-    if (description.length > maxLength) {
-      return description.substring(0, maxLength) + "...";
-    }
-    return description;
-  };
-
-  const htmlContent = `
-    <html>
-      <body style="font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; height: 630px; width: 1200px; overflow: hidden;">
-        <div style="position: relative; background-color: #13181d; color: white; padding: 20px; height: 630px; width: 1200px; box-sizing: border-box;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center;">
-              <img src="${avatar}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 20px;" />
-              <div style="text-align: left;">
-                <span style="font-size: 24px; font-weight: bold;">${username}</span>
-                <p style="font-size: 16px;">${new Date(updatedAt).toLocaleDateString()}</p>
-              </div>
-            </div>
-            <p style="font-size: 16px;">${category}</p>
-          </div>
-          <h1 style="margin-top: 20px; font-size: 32px; font-weight: bold;">${title}</h1>
-          <p style="font-size: 24px; color: #9bb7b8;">${truncateDescription(description)}</p>
-          <div style="margin-top: 20px; border: 1px solid #ccc; padding: 10px;">
-            <img src="${media}" style="max-width: 160px; height: auto;" />
-          </div>
-        </div>
-      </body>
-    </html>
-  `;
-
-  res.set('Content-Type', 'text/html');
-  res.send(htmlContent);
-});
-
 app.get('/api/generate-image', async (req, res) => {
-  const { avatar, title, description, media, username, category, updatedAt } = req.query;
+  const { avatar, title, description, media, username, category, updatedAt, voteCount, commentsCount } = req.query;
   const truncateDescription = (description, maxLength = 50) => {
     if (description.length > maxLength) {
       return description.substring(0, maxLength) + "...";
@@ -71,26 +43,37 @@ app.get('/api/generate-image', async (req, res) => {
 
   const htmlContent = `
     <html>
-      <body style="font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; height: 630px; width: 1200px; overflow: hidden;">
-        <div style="position: relative; background-color: #13181d; color: white; padding: 20px; height: 630px; width: 1200px; box-sizing: border-box;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
+
+<body style="font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; height: 630px; width: 1200px; overflow: hidden;">
+    <div style="position: relative; background-color: #13181d; color: white; padding: 20px; height: 630px; width: 1200px; box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <div style="display: flex; align-items: center;">
-              <img src="${avatar}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 20px;" />
-              <div style="text-align: left;">
-                <span style="font-size: 24px; font-weight: bold;">${username}</span>
-                <p style="font-size: 16px;">${new Date(updatedAt).toLocaleDateString()}</p>
-              </div>
+                <img src="${avatar}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 20px;" />
+                <div style="text-align: left;">
+                    <span style="font-size: 24px; font-weight: bold;">${username}</span>
+                    <p style="font-size: 16px;">${new Date(updatedAt).toLocaleDateString()}</p>
+                </div>
             </div>
             <p style="font-size: 16px;">${category}</p>
-          </div>
-          <h1 style="margin-top: 20px; font-size: 32px; font-weight: bold;">${title}</h1>
-          <p style="font-size: 24px; color: #9bb7b8;">${truncateDescription(description)}</p>
-          <div style="margin-top: 20px; border: 1px solid #ccc; padding: 10px;">
-            <img src="${media}" style="max-width: 160px; height: auto;" />
-          </div>
         </div>
-      </body>
-    </html>
+        <h1 style="margin-top: 20px; font-size: 32px; font-weight: bold; text-align: left;">${title}</h1>
+        <p style="font-size: 24px; color: #9bb7b8; text-align: left;">${truncateDescription(description)}</p>
+        <div style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; ">
+            <img src="${media}" style=" height: auto;" />
+        </div>
+        <div style="display: flex;  margin-top: 20px; font-size: 20px;">
+        <div style="display: flex; align-items: center; margin-right: 20px">
+            <img src="${voteIconBase64}" style="width: 24px; height: 24px; margin-right: 5px;" />
+            ${voteCount}
+        </div>
+            <div style="display: flex; align-items: center; margin-right: 20px;">
+                <img src="${commentIconBase64}" style="width: 24px; height: 24px; margin-right: 5px;" />
+                ${commentsCount}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
   `;
 
   // Ensure the public directory exists
@@ -99,10 +82,7 @@ app.get('/api/generate-image', async (req, res) => {
     fs.mkdirSync(publicDir);
   }
 
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    executablePath: '/path/to/chrome' // Replace with the logged path
-  });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   // Set viewport to the desired image size
@@ -115,7 +95,7 @@ app.get('/api/generate-image', async (req, res) => {
 
   await browser.close();
 
-  res.json({ imageUrl: `https://medial-assignment.onrender.com/og-image.png` });
+  res.json({ imageUrl: `http://localhost:3000/og-image.png` });
 });
 
 app.listen(process.env.PORT, () => {

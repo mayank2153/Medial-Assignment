@@ -23,10 +23,12 @@ const PostPage = () => {
       media: post.media,
       username: post.owner.userName,
       category: post.category.name,
-      updatedAt: post.updatedAt
+      updatedAt: post.updatedAt,
+      voteCount: post.votes.length,
+      commentsCount: post.comments.length
     });
-
-    return `https://medial-assignment.onrender.com/api/generate-image?${params.toString()}`;
+    
+    return `http://localhost:3000/api/generate-image?${params.toString()}`;
   };
 
   const fetchImageUrl = async () => {
