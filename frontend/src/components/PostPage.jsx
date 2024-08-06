@@ -25,7 +25,7 @@ const PostPage = () => {
       category: post.category.name,
       updatedAt: post.updatedAt
     });
-
+    console.log(`http://localhost:3000/api/generate-image?${params.toString()}`)
     return `http://localhost:3000/api/generate-image?${params.toString()}`;
   };
 
