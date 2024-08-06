@@ -5,8 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "postinstall": "npx puppeteer install",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon index.js"
+    "start":"nodemon index.js",
+    "log-chrome-path": "node -e \"console.log(require('puppeteer').executablePath())\""
   },
   "author": "",
   "license": "ISC",

@@ -101,6 +101,7 @@ app.get('/api/generate-image', async (req, res) => {
 
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    executablePath: '/path/to/chrome' // Replace with the logged path
   });
   const page = await browser.newPage();
 
@@ -114,7 +115,7 @@ app.get('/api/generate-image', async (req, res) => {
 
   await browser.close();
 
-  res.json({ imageUrl: `http://localhost:3000/og-image.png` });
+  res.json({ imageUrl: `https://medial-assignment.onrender.com/og-image.png` });
 });
 
 app.listen(process.env.PORT, () => {
