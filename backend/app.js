@@ -13,20 +13,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.use(cookieParser());
-
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-    credentials: true,
-  })
-);
+app.use(cors()); // Allow all origins
 
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
-
-app.use(cors())
-
 
 app.get("/", (req, res) => {
   res.send("Media Assignment");
@@ -108,7 +99,9 @@ app.get('/api/generate-image', async (req, res) => {
     fs.mkdirSync(publicDir);
   }
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const page = await browser.newPage();
 
   // Set viewport to the desired image size
@@ -122,6 +115,10 @@ app.get('/api/generate-image', async (req, res) => {
   await browser.close();
 
   res.json({ imageUrl: `http://localhost:3000/og-image.png` });
+});
+
+app.listen(process.env.PORT, () => {
+  console.log('listening on port ' + process.env.PORT);
 });
 
 export { app };
