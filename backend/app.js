@@ -12,8 +12,9 @@ dotenv.config({
   path: '.env'
 });
 
-// Log the Chrome path
-console.log('CHROME_PATH:', process.env.CHROME_PATH);
+// Log the default Puppeteer executable path
+const defaultExecutablePath = puppeteer.executablePath();
+console.log('Default Puppeteer executable path:', defaultExecutablePath);
 
 // Define __dirname in ES6 modules
 const __filename = fileURLToPath(import.meta.url);
@@ -91,7 +92,7 @@ app.get('/api/generate-image', async (req, res) => {
   }
 
   const browser = await puppeteer.launch({
-    executablePath: process.env.CHROME_PATH, // Use the Chrome path from the environment variable
+    executablePath: defaultExecutablePath, // Use Puppeteer's default executable path
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   
