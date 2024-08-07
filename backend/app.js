@@ -12,10 +12,6 @@ dotenv.config({
   path: '.env'
 });
 
-// Log the default Puppeteer executable path
-const defaultExecutablePath = puppeteer.executablePath();
-console.log('Default Puppeteer executable path:', defaultExecutablePath);
-
 // Define __dirname in ES6 modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -91,8 +87,9 @@ app.get('/api/generate-image', async (req, res) => {
     fs.mkdirSync(publicDir);
   }
 
+  // Use Puppeteer's Chromium executable path
   const browser = await puppeteer.launch({
-    executablePath: defaultExecutablePath, // Use Puppeteer's default executable path
+    executablePath: puppeteer.executablePath(),
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   
@@ -108,7 +105,7 @@ app.get('/api/generate-image', async (req, res) => {
 
   await browser.close();
 
-  res.json({ imageUrl: `http://localhost:3000/og-image.png` });
+  res.json({ imageUrl: `https://medial-assignment-mayank.onrender.com/og-image.png` });
 });
 
 export { app };
