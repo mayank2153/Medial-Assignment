@@ -28,7 +28,7 @@ const PostPage = () => {
       commentsCount: post.comments.length
     });
     
-    return `http://localhost:3000/api/generate-image?${params.toString()}`;
+    return `https://medial-assignment-mayank.onrender.com/api/generate-image?${params.toString()}`;
   };
 
   const fetchImageUrl = async () => {
