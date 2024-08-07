@@ -16,3 +16,6 @@ echo "CHROME_PATH=$CHROME_PATH" >> .env
 
 # Install npm dependencies
 npm install
+
+# Install Puppeteer with specific Chrome version
+npx puppeteer browsers install chrome
