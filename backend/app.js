@@ -12,6 +12,9 @@ dotenv.config({
   path: '.env'
 });
 
+// Log the Chrome path
+console.log('CHROME_PATH:', process.env.CHROME_PATH);
+
 // Define __dirname in ES6 modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
