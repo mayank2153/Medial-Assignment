@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core"; // Use puppeteer-core
 import path from "path";
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -81,7 +81,10 @@ app.get('/api/generate-image', async (req, res) => {
     fs.mkdirSync(publicDir);
   }
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    executablePath: '/usr/bin/google-chrome-stable',
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
   const page = await browser.newPage();
 
   // Set viewport to the desired image size
