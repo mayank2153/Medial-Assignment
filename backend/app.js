@@ -43,7 +43,6 @@ app.get('/api/generate-image', async (req, res) => {
 
   const htmlContent = `
     <html>
-
 <body style="font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; height: 630px; width: 1200px; overflow: hidden;">
     <div style="position: relative; background-color: #13181d; color: white; padding: 20px; height: 630px; width: 1200px; box-sizing: border-box;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -96,10 +95,6 @@ app.get('/api/generate-image', async (req, res) => {
   await browser.close();
 
   res.json({ imageUrl: `http://localhost:3000/og-image.png` });
-});
-
-app.listen(process.env.PORT, () => {
-  console.log('listening on port ' + process.env.PORT);
 });
 
 export { app };
