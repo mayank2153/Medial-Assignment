@@ -1,10 +1,16 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import puppeteer from "puppeteer-core"; // Use puppeteer-core
+import puppeteer from "puppeteer";
 import path from "path";
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config({
+  path: '.env'
+});
 
 // Define __dirname in ES6 modules
 const __filename = fileURLToPath(import.meta.url);
@@ -43,36 +49,36 @@ app.get('/api/generate-image', async (req, res) => {
 
   const htmlContent = `
     <html>
-<body style="font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; height: 630px; width: 1200px; overflow: hidden;">
-    <div style="position: relative; background-color: #13181d; color: white; padding: 20px; height: 630px; width: 1200px; box-sizing: border-box;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center;">
-                <img src="${avatar}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 20px;" />
-                <div style="text-align: left;">
-                    <span style="font-size: 24px; font-weight: bold;">${username}</span>
-                    <p style="font-size: 16px;">${new Date(updatedAt).toLocaleDateString()}</p>
+    <body style="font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; height: 630px; width: 1200px; overflow: hidden;">
+        <div style="position: relative; background-color: #13181d; color: white; padding: 20px; height: 630px; width: 1200px; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center;">
+                    <img src="${avatar}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 20px;" />
+                    <div style="text-align: left;">
+                        <span style="font-size: 24px; font-weight: bold;">${username}</span>
+                        <p style="font-size: 16px;">${new Date(updatedAt).toLocaleDateString()}</p>
+                    </div>
+                </div>
+                <p style="font-size: 16px;">${category}</p>
+            </div>
+            <h1 style="margin-top: 20px; font-size: 32px; font-weight: bold; text-align: left;">${title}</h1>
+            <p style="font-size: 24px; color: #9bb7b8; text-align: left;">${truncateDescription(description)}</p>
+            <div style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; ">
+                <img src="${media}" style=" height: auto;" />
+            </div>
+            <div style="display: flex;  margin-top: 20px; font-size: 20px;">
+            <div style="display: flex; align-items: center; margin-right: 20px">
+                <img src="${voteIconBase64}" style="width: 24px; height: 24px; margin-right: 5px;" />
+                ${voteCount}
+            </div>
+                <div style="display: flex; align-items: center; margin-right: 20px;">
+                    <img src="${commentIconBase64}" style="width: 24px; height: 24px; margin-right: 5px;" />
+                    ${commentsCount}
                 </div>
             </div>
-            <p style="font-size: 16px;">${category}</p>
         </div>
-        <h1 style="margin-top: 20px; font-size: 32px; font-weight: bold; text-align: left;">${title}</h1>
-        <p style="font-size: 24px; color: #9bb7b8; text-align: left;">${truncateDescription(description)}</p>
-        <div style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; ">
-            <img src="${media}" style=" height: auto;" />
-        </div>
-        <div style="display: flex;  margin-top: 20px; font-size: 20px;">
-        <div style="display: flex; align-items: center; margin-right: 20px">
-            <img src="${voteIconBase64}" style="width: 24px; height: 24px; margin-right: 5px;" />
-            ${voteCount}
-        </div>
-            <div style="display: flex; align-items: center; margin-right: 20px;">
-                <img src="${commentIconBase64}" style="width: 24px; height: 24px; margin-right: 5px;" />
-                ${commentsCount}
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+    </body>
+    </html>
   `;
 
   // Ensure the public directory exists
@@ -82,8 +88,10 @@ app.get('/api/generate-image', async (req, res) => {
   }
 
   const browser = await puppeteer.launch({
+    executablePath: process.env.CHROME_PATH, // Use the Chrome path from the environment variable
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
+  
   const page = await browser.newPage();
 
   // Set viewport to the desired image size
